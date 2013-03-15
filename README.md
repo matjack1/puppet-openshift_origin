@@ -33,6 +33,12 @@ The module can be obtained from the
 1. Rename this directory to just `openshift_origin` and place it in your
 	   [modulepath](http://docs.puppetlabs.com/learning/modules1.html#modules).
 
+##Notes for weLaika testing
+
+commands with fixes for ubuntu
+
+```curl -s https://nodeload.github.com/matjack1/puppet-openshift_origin/legacy.tar.gz/master | tar zxf – –strip 1 –wildcards ‘**/test’ && mv test origin_vagrant```
+
 # Configuration
 
 There is one class (`openshift_origin`) that needs to be declared on all nodes managing
