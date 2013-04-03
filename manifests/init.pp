@@ -34,6 +34,8 @@
 #   True if an OpenShift Origin console should be installed and configured on this node.
 # [*configure_node*]
 #   True if an OpenShift Origin node should be installed and configured on this node.
+# [*use_v2_carts*]
+#   True if an OpenShift Origin node should be configured to use v2 cartridges. (Alpha)
 # [*set_sebooleans*]
 #   Set to true to setup selinux booleans. Set to 'delayed' to setup selinux booleans upon next boot.
 # [*install_repo*]
@@ -95,9 +97,9 @@
 # [*mongo_auth_password*]
 #   Password to authenticate against Mongo DB server
 # [*named_tsig_priv_key*]
-#   TSIG signature to authenticate against the Bind DNS server.  
+#   TSIG signature to authenticate against the Bind DNS server.
 # [*os_unmanaged_users*]
-#   List of users with UID which should not be managed by OpenShift. (By default OpenShift Origin PAM will reserve all 
+#   List of users with UID which should not be managed by OpenShift. (By default OpenShift Origin PAM will reserve all
 #   UID's > 500 and prevent user logins)
 # [*update_network_dns_servers*]
 #   True if Bind DNS server specified in <code>named_ipaddress</code> should be added as first DNS server for application name.
@@ -135,16 +137,17 @@ class openshift_origin (
   $configure_qpid             = false,
   $configure_mongodb          = true,
   $configure_named            = true,
-  $configure_avahi            = false,  
+  $configure_avahi            = false,
   $configure_broker           = true,
   $configure_console          = true,
   $configure_node             = true,
+  $use_v2_carts               = false,
   $set_sebooleans             = true,
   $install_login_shell        = false,
   $install_repo               = 'nightlies',
   $named_ipaddress            = $::ipaddress,
-  $avahi_ipaddress            = $::ipaddress,  
-  $mongodb_fqdn               = $::fqdn,
+  $avahi_ipaddress            = $::ipaddress,
+  $mongodb_fqdn               = 'localhost',
   $mq_fqdn                    = $::fqdn,
   $broker_fqdn                = $::fqdn,
   $cloud_domain               = 'example.com',
@@ -160,7 +163,10 @@ class openshift_origin (
   $broker_auth_key_password   = '',
   $broker_auth_salt           = 'ClWqe5zKtEW4CJEMyjzQ',
   $broker_rsync_key           = '',
-  $broker_dns_plugin          = 'nsupdate',  
+  $broker_dns_plugin          = 'nsupdate',
+  $kerberos_keytab            = '/var/www/openshift/broker/httpd/conf.d/http.keytab',
+  $kerberos_realm             = 'EXAMPLE.COM',
+  $kerberos_service           = $::fqdn,
   $mq_provider                = 'activemq',
   $mq_server_user             = 'mcollective',
   $mq_server_password         = 'marionette',
@@ -173,10 +179,6 @@ class openshift_origin (
   $development_mode           = false
 ) {
   include openshift_origin::params
-
-  if $::facterversion <= '1.6.16' {
-    fail 'Facter version needs to be updated to at least 1.6.17'
-  }
 
   $service   = $::operatingsystem ? {
     'Fedora' => '/usr/sbin/service',
@@ -313,6 +315,12 @@ class openshift_origin (
   }
   )
 
+  ensure_resource('package', 'ruby-devel', {
+      ensure  => present,
+    }
+  )
+
+
   if $enable_network_services == true {
     service { [httpd, network, sshd]:
       enable  => true,
@@ -372,11 +380,11 @@ class openshift_origin (
   if ($configure_console == true) {
     include openshift_origin::console
   }
-  
+
   if ($set_sebooleans == true or $set_sebooleans == 'delayed') {
     include openshift_origin::selinux
   }
-  
+
   if ($install_login_shell == true) {
     include openshift_origin::custom_shell
   }
