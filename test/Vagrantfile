@@ -22,7 +22,7 @@ Vagrant::Config.run do |config|
     sudo /sbin/service network restart                        | tee -a /var/log/origin-setup.log; \
     sudo /sbin/service activemq restart                       | tee -a /var/log/origin-setup.log; \
     sudo /sbin/service cgconfig restart                       | tee -a /var/log/origin-setup.log; \
-    sudo /sbin/servie cgred restart                           | tee -a /var/log/origin-setup.log; \
+    sudo /sbin/service cgred restart                           | tee -a /var/log/origin-setup.log; \
     sleep 5; \
     sudo /sbin/service openshift-cgroups restart              | tee -a /var/log/origin-setup.log; \
     sudo /sbin/service httpd restart                          | tee -a /var/log/origin-setup.log; \
