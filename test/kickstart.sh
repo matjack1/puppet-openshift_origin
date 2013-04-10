@@ -1,5 +1,6 @@
 #!/bin/bash
     touch /var/log/origin-setup.log; \
+/bin/rpm -ivh http://ftp-stud.hs-esslingen.de/pub/epel/6/i386/epel-release-6-8.noarch.rpm
 yum update -y                                          | tee -a /var/log/origin-setup.log; \
 /bin/rpm -ivh http://yum.puppetlabs.com/el/6/products/i386/puppetlabs-release-6-6.noarch.rpm
 yum install -y puppet facter
