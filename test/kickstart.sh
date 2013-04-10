@@ -1,8 +1,10 @@
 #!/bin/bash
     touch /var/log/origin-setup.log; \
 yum update -y                                          | tee -a /var/log/origin-setup.log; \
+/bin/rpm -ivh http://yum.puppetlabs.com/el/6/products/i386/puppetlabs-release-6-6.noarch.rpm
+yum install -y puppet facter
+/bin/rpm -e $(rpm -qa | grep -i puppetlabs-release)
 /usr/bin/puppet module uninstall openshift/openshift_origin          | tee -a /var/log/origin-setup.log; \
-/usr/bin/puppet module install openshift/openshift_origin            | tee -a /var/log/origin-setup.log; \
 /usr/bin/puppet apply --verbose /root/puppet-openshift_origin/test/manifests/init.pp      | tee -a /var/log/origin-setup.log; \
 /usr/bin/puppet apply --verbose /root/puppet-openshift_origin/test/manifests/configure.pp | tee -a /var/log/origin-setup.log; \
 
