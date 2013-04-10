@@ -1,7 +1,6 @@
 $keyfile='/var/named/Kexample.com.*.key'
 $key=inline_template('<%=File.read(Dir.glob(keyfile)[0]).strip.split(\' \')[7]%>')
 class { 'openshift_origin' :
-  puppet_centos              => "true",
   node_fqdn                  => "${hostname}.${domain}",
   create_origin_yum_repos    => true,
   cloud_domain               => 'example.com',
