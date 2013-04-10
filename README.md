@@ -36,12 +36,11 @@ The module can be obtained from the
 	or clone where you like (but you'll probably have to ```yum install git``` ahead of this ;) )
 1. Upload the Zip file to your Puppet Master.
 1. Unzip the file.  This will create a new directory called puppet-openshift_origin-{commit hash}
-1. Rename this directory to just `openshift_origin` and place it in your
-	   [modulepath](http://docs.puppetlabs.com/learning/modules1.html#modules).
+1. Create your future modulepath: ```mkdir -p /etc/puppet/modules```
+1. Rename this directory to just `openshift_origin` and place it in your previously created
+	   [modulepath](http://docs.puppetlabs.com/learning/modules1.html#modules)
 1. Launch from your prompt
-    $ bash /your/module/path/openshift-origin/test/kickstart.sh
-
-Most of the time the _modulepath_ is ```/etc/puppet/modules```
+    $ bash /etc/puppet/modules/openshift-origin/test/kickstart.sh
 
 # Configuration
 
