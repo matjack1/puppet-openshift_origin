@@ -4,6 +4,8 @@
 # infrastructure. This is the only class that needs to be declared.
 #
 # === Parameters:
+# [*puppet_centos*]
+#  Install Puppet and Facter from puppetlabs repos
 # [*node_fqdn*]
 #   The FQDN for this host
 # [*create_origin_yum_repos*]
@@ -233,6 +235,9 @@ class openshift_origin (
   $echo      = $::operatingsystem ? {
     'Fedora' => '/usr/bin/echo',
     default  => '/bin/echo',
+  }
+  if $puppet_facter == true {
+    include openshift_origin::puppet_centos
   }
 
   if $configure_ntp == true {
