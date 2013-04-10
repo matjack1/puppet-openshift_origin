@@ -13,6 +13,11 @@ services including ActiveMQ, Qpid, MongoDB, named and OS settings including fire
 * Ben Langfeld
 * Krishna Raman
 
+# About this fork
+
+Me and @matjack1 are trying to modify a bit this provision script so that it could work on Centos6.x
+We're still in trouble, but we hope to achieve something a bit solid and without too ugly code
+
 # Requirements
 
 * Puppet >= 2.7
@@ -29,11 +34,15 @@ services including ActiveMQ, Qpid, MongoDB, named and OS settings including fire
 The module can be obtained from the
 [github repository](https://github.com/matjack1/puppet-openshift_origin).
 
-1. Download the [Zip file from github](https://github.com/kraman/puppet-openshift_origin/archive/master.zip)
+1. Download the [Zip file from github](https://github.com/matjack1/puppet-openshift_origin/archive/master.zip)
 1. Upload the Zip file to your Puppet Master.
 1. Unzip the file.  This will create a new directory called puppet-openshift_origin-{commit hash}
 1. Rename this directory to just `openshift_origin` and place it in your
 	   [modulepath](http://docs.puppetlabs.com/learning/modules1.html#modules).
+1. Launch from your prompt
+    $ bash /your/module/path/openshift-origin/test/kickstart.sh
+
+Most of the time the _modulepath_ is ```/etc/puppet/modules```
 
 ##Notes for weLaika testing
 
