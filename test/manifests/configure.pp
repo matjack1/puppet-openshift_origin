@@ -16,4 +16,5 @@ class { 'openshift_origin' :
   configure_broker           => true,
   configure_node             => true,
   development_mode           => true,
+  create_origin_yum_repos    => true,
 }
