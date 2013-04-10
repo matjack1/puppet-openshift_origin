@@ -27,7 +27,7 @@ services including ActiveMQ, Qpid, MongoDB, named and OS settings including fire
 # Installation
 
 The module can be obtained from the
-[github repository](https://github.com/kraman/puppet-openshift_origin).
+[github repository](https://github.com/matjack1/puppet-openshift_origin).
 
 1. Download the [Zip file from github](https://github.com/kraman/puppet-openshift_origin/archive/master.zip)
 1. Upload the Zip file to your Puppet Master.
