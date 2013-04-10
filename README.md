@@ -35,6 +35,7 @@ The module can be obtained from the
 [github repository](https://github.com/matjack1/puppet-openshift_origin).
 
 1. Download the [Zip file from github](https://github.com/matjack1/puppet-openshift_origin/archive/master.zip)
+	or clone where you like (but you'll probably have to ```yum install git``` ahead of this ;) )
 1. Upload the Zip file to your Puppet Master.
 1. Unzip the file.  This will create a new directory called puppet-openshift_origin-{commit hash}
 1. Rename this directory to just `openshift_origin` and place it in your
@@ -43,12 +44,6 @@ The module can be obtained from the
     $ bash /your/module/path/openshift-origin/test/kickstart.sh
 
 Most of the time the _modulepath_ is ```/etc/puppet/modules```
-
-##Notes for weLaika testing
-
-commands with fixes for ubuntu
-
-```curl -s https://nodeload.github.com/matjack1/puppet-openshift_origin/legacy.tar.gz/master | tar zxf – –strip 1 –wildcards ‘**/test’ && mv test origin_vagrant```
 
 # Configuration
 
