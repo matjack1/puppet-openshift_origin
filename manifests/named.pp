@@ -136,7 +136,7 @@ class openshift_origin::named {
 
   file { 'resolv.conf':
     path    => '/etc/resolv.conf',
-    content => template('openshift_origin/named/resolv.conf.erb')
+    content => template('openshift_origin/resolv')
   }
 
 
