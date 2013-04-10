@@ -20,14 +20,12 @@ We're still in trouble, but we hope to achieve something a bit solid and without
 
 # Requirements
 
+These are requirements, but we'll manage to install theme inside the kickstart.sh. Here just FYI
+
 * Puppet >= 2.7
 * Facter >= 1.6.17
-* Puppetlabs/stdlib module.  Can be obtained
-  [here](http://forge.puppetlabs.com/puppetlabs/stdlib) or with the command
-  `puppet module install puppetlabs/stdlib`
-* Puppetlabs/ntp module.  Can be obtained
-  [here](http://forge.puppetlabs.com/puppetlabs/ntp) or with the command
-  `puppet module install puppetlabs/ntp`
+* Puppetlabs/stdlib module
+* Puppetlabs/ntp module
 
 # Installation
 
