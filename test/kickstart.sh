@@ -19,4 +19,4 @@ sleep 5; \
 /sbin/service openshift-node-web-proxy restart       | tee -a /var/log/origin-setup.log; \
 /sbin/service named restart                          | tee -a /var/log/origin-setup.log; \
 /sbin/service mcollective restart                    | tee -a /var/log/origin-setup.log; \
-/usr/sbin/oo-register-dns -h broker -n 127.0.0.1       | tee -a /var/log/origin-setup.log;
+/usr/sbin/oo-register-dns -h broker -n $(/sbin/ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')       | tee -a /var/log/origin-setup.log;
