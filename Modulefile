@@ -1,4 +1,4 @@
-name 'openshift-openshift_origin-centos'
+name 'openshift-openshift_origin'
 version '0.1.6'
 
 author 'Mojo Lingo, Red Hat with some spices from weLaika'
