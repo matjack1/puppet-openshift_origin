@@ -40,7 +40,7 @@ The module can be obtained from the
 1. Rename this directory to just `openshift_origin` and place it in your previously created
 	   [modulepath](http://docs.puppetlabs.com/learning/modules1.html#modules)
 1. Launch from your prompt
-    $ bash /etc/puppet/modules/openshift-origin/test/kickstart.sh
+    $ bash /etc/puppet/modules/openshift_origin/test/kickstart.sh
 
 # Configuration
 
