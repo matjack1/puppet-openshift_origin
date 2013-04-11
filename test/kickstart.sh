@@ -8,8 +8,8 @@ yum install -y puppet facter
 /usr/bin/puppet module install puppetlabs/stdlib       | tee -a /var/log/origin-setup.log
 /usr/bin/puppet module install puppetlabs/ntp          | tee -a /var/log/origin-setup.log
 /usr/bin/puppet module uninstall openshift/openshift_origin          | tee -a /var/log/origin-setup.log
-/usr/bin/puppet apply --verbose /root/puppet-openshift_origin/test/manifests/init.pp      | tee -a /var/log/origin-setup.log
-/usr/bin/puppet apply --verbose /root/puppet-openshift_origin/test/manifests/configure.pp | tee -a /var/log/origin-setup.log
+/usr/bin/puppet apply --verbose /etc/puppet/modules/openshift_origin/test/manifests/init.pp      | tee -a /var/log/origin-setup.log
+/usr/bin/puppet apply --verbose /etc/puppet/modules/openshift_origin/test/manifests/configure.pp | tee -a /var/log/origin-setup.log
 
 /sbin/service network restart                        | tee -a /var/log/origin-setup.log
 /sbin/service activemq restart                       | tee -a /var/log/origin-setup.log
