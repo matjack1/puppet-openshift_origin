@@ -248,6 +248,11 @@ class openshift_origin (
     warning 'mcollective commands may start failing.'
   }
 
+  file { 'hosts':
+    path     => '/etc/hosts',
+    content  => template('openshift_origin/hosts.erb')
+  }
+
   if $configure_activemq == true {
     include openshift_origin::activemq
   }
