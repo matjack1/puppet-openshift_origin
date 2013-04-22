@@ -39,6 +39,8 @@ The module can be obtained from the
 1. Create your future modulepath: ```mkdir -p /etc/puppet/modules```
 1. Rename this directory to just `openshift_origin` and place it in your previously created
 	   [modulepath](http://docs.puppetlabs.com/learning/modules1.html#modules)
+1. Edit line 1 and 5 in test/manifests/configure.pp
+1. Edit line 7 in test/manifests/init.pp
 1. Launch from your prompt
     $ bash /etc/puppet/modules/openshift_origin/test/kickstart.sh
 
