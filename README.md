@@ -47,7 +47,7 @@ and that you have the right mood to follow these steps
 1. Edit line 1 and 5 in test/manifests/configure.pp substituting all *example.com* occurrences with the domain of your choice
 1. Edit line 6 and 7 in test/manifests/init.pp substituting all *example.com* occurrences with the domain of your choice
 1. ```bash /etc/puppet/modules/openshift_origin/test/kickstart.sh```
-1. Don't stop the provision if you errors! Wait a lot...probably you'll need a lot of [nyan](http://www.nyan.cat/)
+1. Don't stop the provision if you see errors! Wait a lot...probably you'll need a lot of [nyan](http://www.nyan.cat/)
 1. Log out and in back to be sure to load new ENV
 1. ```yum install ruby193-rubygem-net-ssh ruby193-rubygem-archive-tar-minitar ruby193-rubygem-commander``` and ```gem install httpclient```. Read about on [this issue](https://github.com/matjack1/puppet-openshift_origin/issues/14)
 1. Due to non-fixed and probably won't fixed little issues you'l have to tun twice the provision with another ```bash /etc/puppet/modules/openshift_origin/test/kickstart.sh```. This will be very shorter and should fix all the errors left behind first provision
