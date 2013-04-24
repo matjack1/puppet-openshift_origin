@@ -9,5 +9,5 @@ $TTL 1800
                           )
                      NS ns1.<%= scope.lookupvar('::openshift_origin::cloud_domain') %>.
 $ORIGIN <%= scope.lookupvar('::openshift_origin::cloud_domain') %>.
-ns1	              A        127.0.0.1
+ns1	              A        <%= scope.lookupvar('::openshift_origin::named_ipaddress') %>
 
