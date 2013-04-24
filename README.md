@@ -15,34 +15,43 @@ services including ActiveMQ, Qpid, MongoDB, named and OS settings including fire
 
 # About this fork
 
-Me and @matjack1 are trying to modify a bit this provision script so that it could work on Centos6.x
-We're still in trouble, but we hope to achieve something a bit solid and without too ugly code
+@pioneerskies and @matjack1 are trying to modify a bit this provision script so that it should work on Centos6.x
+We're glad to say that we are provisioning successfully at this point of tweaking! Hoooray!
 
-# Requirements
+In this fork the goal is to build a live playground on a public VPS; actually we provision the ecosystem on the bare OS, without vagrant, but with a little kickstart.sh script. And all of this is done on top of Centos6.4
 
-These are requirements, but we'll manage to install theme inside the kickstart.sh. Here just FYI
+We made some changes to the puppet script and we hope that some of theme will be at least of inspiration to get the official script on the right way to run flewlessly on CentOS.
 
-* Puppet >= 2.7
-* Facter >= 1.6.17
-* Puppetlabs/stdlib module
-* Puppetlabs/ntp module
+## Known Issues
+###### (you man advised before installation!)
+
+We know that on the first provision you'll get a bunch of errors; the entire _Console_ and _Broker_ installation processes will fail; I'm investigating around this problem (and I have a path), but we know that after the second provision everything will be fine!!!
+If you need to improve this aspect, please drop us a some lines of code to fix our ;)
 
 # Installation
 
-The module can be obtained from the
-[github repository](https://github.com/matjack1/puppet-openshift_origin).
+We assume you're
 
-1. Download the [Zip file from github](https://github.com/matjack1/puppet-openshift_origin/archive/master.zip)
-	or clone where you like (but you'll probably have to ```yum install git``` ahead of this ;) )
-1. Upload the Zip file to your Puppet Master.
-1. Unzip the file.  This will create a new directory called puppet-openshift_origin-{commit hash}
-1. Create your future modulepath: ```mkdir -p /etc/puppet/modules```
-1. Rename this directory to just `openshift_origin` and place it in your previously created
-	   [modulepath](http://docs.puppetlabs.com/learning/modules1.html#modules)
-1. Edit line 1 and 5 in test/manifests/configure.pp
-1. Edit line 7 in test/manifests/init.pp
-1. Launch from your prompt
-    $ bash /etc/puppet/modules/openshift_origin/test/kickstart.sh
+* on a new VPS
+* SO Centos
+* logged in as root
+* you have a working network setup (overall reboot proof ;) )
+
+and that you have the right mood to follow these steps
+
+1. ```yum install vim github```
+1. ```cd && git clone git://github.com/matjack1/puppet-openshift_origin.git```
+1. ```mkdir -p /etc/puppet/modules```
+1. ```mv puppet-openshift_origin openshift_origin```
+1. ```mv openshift_origin /etc/puppet/modules```
+1. Edit line 1 and 5 in test/manifests/configure.pp substituting all *example.com* occurrences with the domain of your choice
+1. Edit line 6 and 7 in test/manifests/init.pp substituting all *example.com* occurrences with the domain of your choice
+1. ```bash /etc/puppet/modules/openshift_origin/test/kickstart.sh```
+1. Don't stop the provision if you errors! Wait a lot...probably you'll need a lot of [nyan](http://www.nyan.cat/)
+1. Log out and in back to be sure to load new ENV
+1. ```yum install ruby193-rubygem-net-ssh ruby193-rubygem-archive-tar-minitar ruby193-rubygem-commander``` and ```gem install httpclient```. Read about on [this issue](https://github.com/matjack1/puppet-openshift_origin/issues/14)
+1. Due to non-fixed and probably won't fixed little issues you'l have to tun twice the provision with another ```bash /etc/puppet/modules/openshift_origin/test/kickstart.sh```. This will be very shorter and should fix all the errors left behind first provision
+1. My colleague @matjack1 says everytime «```reboot``` it twice; anyway». Keep it in mind :P
 
 # Configuration
 
@@ -314,32 +323,3 @@ resolution. (This should be false if using Avahi for MDNS updates)
 
 Set to true to enable development mode and detailed logging
 
-# Known Issues
-
-## Facter
-
-Facter broken on Fedora 17. http://projects.puppetlabs.com/issues/15001
-
-    yumrepo { 'puppetlabs-products':
-      name     => 'puppetlabs-products',
-      descr    => 'Puppet Labs Products Fedora 17 - $basearch',
-      baseurl  => 'http://yum.puppetlabs.com/fedora/f17/dependencies/\$basearch',
-      gpgkey   => 'http://yum.puppetlabs.com/RPM-GPG-KEY-puppetlabs',
-      enabled  => 1,
-      gpgcheck => 1,
-    }
-    
-    yumrepo { 'puppetlabs-deps':
-      name     => 'puppetlabs-deps',
-      descr    => 'Puppet Labs Dependencies Fedora 17 - $basearch',
-      baseurl  => 'http://yum.puppetlabs.com/fedora/f17/products/\$basearch',
-      gpgkey   => 'http://yum.puppetlabs.com/RPM-GPG-KEY-puppetlabs',
-      enabled  => 1,
-      gpgcheck => 1,
-    }
-    
-    package { 'facter':
-      ensure  => latest,
-      require => [Yumrepo['puppetlabs-products'],Yumrepo['puppetlabs-deps']],
-    }
-    
