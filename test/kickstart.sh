@@ -21,6 +21,7 @@ sleep 5
 /sbin/service openshift-broker restart               | tee -a /var/log/origin-setup.log
 /sbin/service openshift-node-web-proxy restart       | tee -a /var/log/origin-setup.log
 /sbin/service mcollective restart                    | tee -a /var/log/origin-setup.log
+/sbin/service named restart                          | tee -a /var/log/origin-setup.log
 hostname=$(hostname)
-/usr/sbin/oo-register-dns -d ${hostname#*.} -h ${hostname%%.*} -n $(/sbin/ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')       | tee -a /var/log/origin-setup.log
+/usr/sbin/oo-register-dns -k /var/named/${hostname#*.}.key -d ${hostname#*.} -h ${hostname%%.*} -n $(/sbin/ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')       | tee -a /var/log/origin-setup.log
 /sbin/service named restart                          | tee -a /var/log/origin-setup.log
