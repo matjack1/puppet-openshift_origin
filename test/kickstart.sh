@@ -1,4 +1,7 @@
 #!/bin/bash
+
+[[ $1 == update ]] && update=true || update=false;
+
 touch /var/log/origin-setup.log
 /bin/rpm -ivh http://ftp-stud.hs-esslingen.de/pub/epel/6/i386/epel-release-6-8.noarch.rpm
 yum update -y                                          | tee -a /var/log/origin-setup.log
@@ -8,9 +11,13 @@ yum install -y puppet facter
 /usr/bin/puppet module install puppetlabs/stdlib       | tee -a /var/log/origin-setup.log
 /usr/bin/puppet module install puppetlabs/ntp          | tee -a /var/log/origin-setup.log
 /usr/bin/puppet module uninstall openshift/openshift_origin          | tee -a /var/log/origin-setup.log
-/usr/bin/puppet apply --verbose /etc/puppet/modules/openshift_origin/test/manifests/init.pp      | tee -a /var/log/origin-setup.log
-/usr/bin/puppet apply --verbose /etc/puppet/modules/openshift_origin/test/manifests/configure.pp | tee -a /var/log/origin-setup.log
-
+if [[ $update == "true" ]]; then
+	/usr/bin/puppet apply --verbose /etc/puppet/modules/openshift_origin/test/manifests/init.pp      | tee -a /var/log/origin-setup.log
+	/usr/bin/puppet apply --verbose /etc/puppet/modules/openshift_origin/test/manifests/configure.pp | tee -a /var/log/origin-setup.log
+else
+	/usr/bin/puppet apply --verbose /etc/puppet/modules/openshift_origin/test/manifests/configure_update.pp | tee -a /var/log/origin-setup.log
+fi
+	
 /sbin/service network restart                        | tee -a /var/log/origin-setup.log
 /sbin/service activemq restart                       | tee -a /var/log/origin-setup.log
 /sbin/service cgconfig restart                       | tee -a /var/log/origin-setup.log
@@ -23,5 +30,8 @@ sleep 5
 /sbin/service mcollective restart                    | tee -a /var/log/origin-setup.log
 /sbin/service named restart                          | tee -a /var/log/origin-setup.log
 hostname=$(hostname)
-/usr/sbin/oo-register-dns -k /var/named/${hostname#*.}.key -d ${hostname#*.} -h ${hostname%%.*} -n $(/sbin/ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')       | tee -a /var/log/origin-setup.log
-/sbin/service named restart                          | tee -a /var/log/origin-setup.log
+
+if [[ $update == "true" ]]; then
+	/usr/sbin/oo-register-dns -k /var/named/${hostname#*.}.key -d ${hostname#*.} -h ${hostname%%.*} -n $(/sbin/ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')       | tee -a /var/log/origin-setup.log
+	/sbin/service named restart                          | tee -a /var/log/origin-setup.log
+fi
