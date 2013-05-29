@@ -128,6 +128,15 @@ class openshift_origin::node {
     mode    => '0644',
   }
 
+  file { 'node sshd config':
+    ensure  => present,
+    path    => '/etc/ssh/sshd_config',
+    content => template('openshift_origin/node/sshd_config.erb'),
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0600',
+  }
+
   if !defined(File['mcollective client config']) {
     file { 'mcollective client config':
       ensure  => present,
@@ -351,15 +360,15 @@ class openshift_origin::node {
     mode    => '0644',
   }
 
-  $printf = $::operatingsystem ? {
-    'Fedora' => '/bin/printf "\nAcceptEnv GIT_SSH\n" >> "/etc/ssh/sshd_config"',
-    default  => '/usr/bin/printf "\nAcceptEnv GIT_SSH\n" >> "/etc/ssh/sshd_config"'
-  }
+#  $printf = $::operatingsystem ? {
+#    'Fedora' => '/bin/printf "\nAcceptEnv GIT_SSH\n" >> "/etc/ssh/sshd_config"',
+#    default  => '/usr/bin/printf "\nAcceptEnv GIT_SSH\n" >> "/etc/ssh/sshd_config"'
+#  }
 
-  exec { 'Update sshd configs':
-    command => $printf,
-    unless  => '/bin/grep -qFx \'AcceptEnv GIT_SSH\' \'/etc/ssh/sshd_config\''
-  }
+#  exec { 'Update sshd configs':
+#    command => $printf,
+#    unless  => '/bin/grep -qFx \'AcceptEnv GIT_SSH\' \'/etc/ssh/sshd_config\''
+#  }
 
   if $::openshift_origin::enable_network_services == true {
     service { 'crond':
@@ -483,6 +492,7 @@ class openshift_origin::node {
           'openshift-origin-cartridge-php-5.4',
           'openshift-origin-cartridge-perl-5.16',
           'openshift-origin-cartridge-phpmyadmin-3.5',
+          'openshift-origin-cartridge-jbossas-7',
         ]:
           ensure  => present,
           require => [
@@ -567,15 +577,55 @@ class openshift_origin::node {
         ensure  => absent,
     }
 
-    package { [
-      'openshift-origin-cartridge-abstract',
-      'openshift-origin-cartridge-php',
-    ]:
-      ensure  => present,
-      require => [
-        Yumrepo[openshift-origin],
-        Yumrepo[openshift-origin-deps],
-      ],
+    case $::operatingsystem {
+      'Fedora' : {
+        package { [
+          'openshift-origin-cartridge-abstract',
+          'openshift-origin-cartridge-php',
+        ]:
+          ensure  => present,
+          require => [
+            Yumrepo[openshift-origin],
+            Yumrepo[openshift-origin-deps],
+          ],
+          notify => Exec['oo-admin-cartridge'],
+        }
+      }
+      default  : {
+        package { [
+          'openshift-origin-cartridge-abstract',
+          'openshift-origin-cartridge-php',
+          'openshift-origin-cartridge-10gen-mms-agent',
+          'openshift-origin-cartridge-cron',
+          'openshift-origin-cartridge-diy',
+          'openshift-origin-cartridge-haproxy',
+          'openshift-origin-cartridge-jenkins',
+          'openshift-origin-cartridge-jenkins-client',
+          'openshift-origin-cartridge-mock',
+          'openshift-origin-cartridge-mock-plugin',
+          'openshift-origin-cartridge-mongodb',
+          'openshift-origin-cartridge-mysql',
+          'openshift-origin-cartridge-nodejs',
+          'openshift-origin-cartridge-perl',
+          'openshift-origin-cartridge-phpmyadmin',
+          'openshift-origin-cartridge-postgresql',
+          'openshift-origin-cartridge-python',
+          'openshift-origin-cartridge-ruby',
+        ]:
+          ensure  => present,
+          require => [
+            Yumrepo[openshift-origin],
+            Yumrepo[openshift-origin-deps],
+          ],
+          notify => Exec['oo-admin-cartridge'],
+        }
+      }
+    }
+    
+    # Note, this does not handle cartridge uninstalls
+    exec { 'oo-admin-cartridge':
+      command => '/usr/sbin/oo-admin-cartridge --recursive -a install -s /usr/libexec/openshift/cartridges/v2/',
+      refreshonly => true,
     }
   }
 }

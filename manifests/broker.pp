@@ -282,8 +282,9 @@ class openshift_origin::broker {
       }
     )
 
-    ensure_resource('package', 'rubygem-mocha', {
-        ensure   => 'latest',
+    ensure_resource('package', 'mocha', {
+        ensure   => '0.12.10',
+        provider => 'gem',
         alias    => 'mocha'
       }
     )
@@ -989,11 +990,24 @@ class openshift_origin::broker {
 
       file { 'openshift htpasswd':
         path    => '/etc/openshift/htpasswd',
-        content => template('openshift_origin/broker/plugins/auth/basic/openshift-htpasswd.erb'),
+        content => template('openshift_origin/broker/plugins/auth/basic/htpasswd.erb'),
         owner   => 'root',
         group   => 'root',
         mode    => '0644',
         require => Package['rubygem-openshift-origin-auth-remote-user']
+      }
+
+      file { 'Broker htpasswd config':
+        path    => '/var/www/openshift/broker/httpd/conf.d/openshift-origin-auth-remote-user-basic.conf',
+        content => template('openshift_origin/broker/plugins/auth/basic/openshift-origin-auth-remote-user-basic.conf.erb'),
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0644',
+        require => [
+          Package['rubygem-openshift-origin-auth-remote-user'],
+          File['openshift htpasswd'],
+        ],
+        notify  => Service["openshift-broker"],
       }
 
       file { 'Auth plugin config':
@@ -1006,12 +1020,17 @@ class openshift_origin::broker {
           Package['rubygem-openshift-origin-auth-remote-user'],
           File['openshift htpasswd'],
         ],
+        notify  => Service["openshift-broker"],
       }
     }
     'kerberos' : {
       package { ['rubygem-openshift-origin-auth-remote-user']:
         ensure => present,
         require => Yumrepo[openshift-origin],
+      }
+
+      package { ['mod_auth_kerb']:
+        ensure => installed,
       }
       
       file {'kerberos keytab':
@@ -1032,6 +1051,7 @@ class openshift_origin::broker {
         mode => '0644',
         require => [
           Package['rubygem-openshift-origin-auth-remote-user'],
+          Package['mod_auth_kerb'],
           File['kerberos keytab']
         ]
       }
@@ -1045,6 +1065,7 @@ class openshift_origin::broker {
         mode => '0644',
         require => [
           Package['rubygem-openshift-origin-auth-remote-user'],
+          Package['mod_auth_kerb'],
           File['kerberos keytab']
         ]
       }
