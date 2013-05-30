@@ -28,6 +28,8 @@ We made some changes to the puppet script and we hope that some of theme will be
 We know that on the first provision you'll get a bunch of errors; the entire _Console_ and _Broker_ installation processes will fail; I'm investigating around this problem (and I have a path), but we know that after the second provision everything will be fine!!!
 If you need to improve this aspect, please drop us a some lines of code to fix our ;)
 
+There is a new branch _updates_from_redhat_ wich I'm just using to test merged commits from RH repo on remote VPS. Please, ignore it.
+
 # Installation
 
 We assume you're
