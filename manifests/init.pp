@@ -108,6 +108,10 @@
 #   resolution. (This should be false if using Avahi for MDNS updates)
 # [*development_mode*]
 #   Set to true to enable development mode and detailed logging
+# [*is_update*]
+#   This is a welaika hack: simply if you set to true it will enforce disabling the named configuration. This is because
+#   we use the script to update an instance already running apps, with already named installed and configured and serving
+#   record
 #
 # === Copyright
 #
@@ -180,7 +184,8 @@ class openshift_origin (
   $named_tsig_priv_key        = '',
   $os_unmanaged_users         = [],
   $update_network_dns_servers = true,
-  $development_mode           = false
+  $development_mode           = false,
+  is_update                   = false
 ) {
   include openshift_origin::params
 
@@ -268,6 +273,11 @@ class openshift_origin (
   }
   if $puppet_facter == true {
     include openshift_origin::puppet_centos
+  }
+
+  if $is_update == true {
+    $configure_named = false
+    $update_network_dns_servers = false
   }
 
   if $configure_ntp == true {
