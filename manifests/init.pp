@@ -300,7 +300,7 @@ class openshift_origin (
     include openshift_origin::mongo
   }
 
-  if $configure_named == true && $is_update == false{
+  if $configure_named == true and $is_update == false{
     include openshift_origin::named
   }
 
@@ -508,7 +508,7 @@ class openshift_origin (
     }
   }
 
-  if $update_network_dns_servers == true && $is_update == false{
+  if $update_network_dns_servers == true and $is_update == false{
     augeas { 'network setup':
       context => '/files/etc/sysconfig/network-scripts/ifcfg-eth0',
       changes => ["set DNS1 ${named_ipaddress}", "set HWADDR ${::macaddress_eth0}"],
