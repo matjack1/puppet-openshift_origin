@@ -275,11 +275,6 @@ class openshift_origin (
     include openshift_origin::puppet_centos
   }
 
-  if $is_update == true {
-    $configure_named = false
-    $update_network_dns_servers = false
-  }
-
   if $configure_ntp == true {
     include openshift_origin::ntpd
   } else {
@@ -305,7 +300,7 @@ class openshift_origin (
     include openshift_origin::mongo
   }
 
-  if $configure_named == true {
+  if $configure_named == true && $is_update == false{
     include openshift_origin::named
   }
 
@@ -513,7 +508,7 @@ class openshift_origin (
     }
   }
 
-  if $update_network_dns_servers == true {
+  if $update_network_dns_servers == true && $is_update == false{
     augeas { 'network setup':
       context => '/files/etc/sysconfig/network-scripts/ifcfg-eth0',
       changes => ["set DNS1 ${named_ipaddress}", "set HWADDR ${::macaddress_eth0}"],
