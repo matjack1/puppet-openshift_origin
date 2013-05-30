@@ -5,7 +5,7 @@
 [[ $1 == update ]] && update=true || update=false;
 
 # "Update" related consistency checks
-function update_conf{
+function update_conf {
 
   i=`/bin/grep is_update /etc/puppet/modules/openshift_origin/test/manifests/configure.pp`
   
@@ -69,6 +69,6 @@ sleep 5
 # If we are updating than register the broker DNS record and restart named
 if [[ $update == "true" ]]; then
   hostname=$(hostname)
-  usr/sbin/oo-register-dns -k /var/named/${hostname#*.}.key -d ${hostname#*.} -h ${hostname%%.*} -n $(/sbin/ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')       | tee -a /var/log/origin-setup.log
-  sbin/service named restart                          | tee -a /var/log/origin-setup.log
+  /usr/sbin/oo-register-dns -k /var/named/${hostname#*.}.key -d ${hostname#*.} -h ${hostname%%.*} -n $(/sbin/ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')       | tee -a /var/log/origin-setup.log
+  /sbin/service named restart                          | tee -a /var/log/origin-setup.log
 fi
