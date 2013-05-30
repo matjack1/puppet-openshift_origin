@@ -6,7 +6,8 @@
 
 # "Update" related consistency checks
 function update_conf{
-  i=$(grep is_update manifests/configure.pp)
+
+  i=`/bin/grep is_update /etc/puppet/modules/openshift_origin/test/manifests/configure.pp`
   
   if [[ $i == '' && $update == "true" ]]; then
     echo "ERROR: you are updating, but something is wrong in manifests/configure.pp. Aborting"
@@ -17,6 +18,7 @@ function update_conf{
   else
     return 0
   fi
+
 }
 
 touch /var/log/origin-setup.log

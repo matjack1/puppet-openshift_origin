@@ -185,7 +185,7 @@ class openshift_origin (
   $os_unmanaged_users         = [],
   $update_network_dns_servers = true,
   $development_mode           = false,
-  is_update                   = false
+  $is_update                   = false
 ) {
   include openshift_origin::params
 
