@@ -282,9 +282,8 @@ class openshift_origin::broker {
       }
     )
 
-    ensure_resource('package', 'mocha', {
-        ensure   => '0.12.10',
-        provider => 'gem',
+    ensure_resource('package', 'ruby193-rubygem-mocha', {
+        ensure   => '0.13.3',
         alias    => 'mocha'
       }
     )
