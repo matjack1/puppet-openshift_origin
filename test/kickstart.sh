@@ -13,7 +13,7 @@ function update_conf {
     echo "ERROR: you are updating, but something is wrong in manifests/configure.pp. Aborting"
     exit 1
   elif [[ `grep false <(echo $i)` ]]; then
-      echo "ERROR: you are updating, but you have declared it in manifests/configure.pp. Aborting"
+      echo "ERROR: you are updating, but you have not declared it in manifests/configure.pp. Aborting"
       exit 1
   else
     return 0

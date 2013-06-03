@@ -28,11 +28,14 @@ We made some changes to the puppet script and we hope that some of theme will be
 We know that on the first provision you'll get a bunch of errors; the entire _Console_ and _Broker_ installation processes will fail; I'm investigating around this problem (and I have a path), but we know that after the second provision everything will be fine!!!
 If you need to improve this aspect, please drop us a some lines of code to fix our ;)
 
+Hey there! After the last commits, if you install broker+node on the same machine, your SSH server will be configured to accept *root login
+just "without-password"*! Be aware and do an ```ssh-copy-id root@yourserver.com``` before starting the script!
+
 # Installation
 
 We assume you're
 
-* on a new VPS
+* on a new clean VPS
 * SO Centos
 * logged in as root
 * you have a working network setup (overall reboot proof ;) )
@@ -42,13 +45,13 @@ and that you have the right mood to follow these steps
 1. ```yum install vim github```
 1. ```cd && git clone git://github.com/matjack1/puppet-openshift_origin.git```
 1. ```mkdir -p /etc/puppet/modules```
-1. ```mv puppet-openshift_origin openshift_origin```
-1. ```mv openshift_origin /etc/puppet/modules```
+1. ```mv puppet-openshift_origin /etc/puppet/modules/openshift_origin```
 1. Edit line 1 and 5 in test/manifests/configure.pp substituting all *example.com* occurrences with the domain of your choice
 1. Are you updating your OpenShift Origin? If you are, than edit line 20 in test/manifests/configure.pp by setting _is_update_ to _true_
 1. Edit line 6 and 7 in test/manifests/init.pp substituting all *example.com* occurrences with the domain of your choice
-1. ```bash /etc/puppet/modules/openshift_origin/test/kickstart.sh```
-  * If you are *updating* OpenShift, then run ```bash /etc/puppet/modules/openshift_origin/test/kickstart.sh update```
+1. Run the script:
+  * If you're doing a fresh provision run ```bash /etc/puppet/modules/openshift_origin/test/kickstart.sh```
+  * If you're *updating* OpenShift, then run ```bash /etc/puppet/modules/openshift_origin/test/kickstart.sh update```
 1. Don't stop the provision if you see errors! Wait a lot...probably you'll need a lot of [nyan](http://www.nyan.cat/)
 1. Log out and in back to be sure to load new ENV
 1. ```yum install ruby193-rubygem-net-ssh ruby193-rubygem-archive-tar-minitar ruby193-rubygem-commander``` and ```gem install httpclient```. Read about on [this issue](https://github.com/matjack1/puppet-openshift_origin/issues/14)
